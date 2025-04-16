@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             StrunaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = "Domagoj",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
