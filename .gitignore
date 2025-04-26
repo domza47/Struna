@@ -14,3 +14,5 @@
 .cxx
 local.properties
 /.idea/vcs.xml
+/.idea/appInsightsSettings.xml
+/app/google-services.json
