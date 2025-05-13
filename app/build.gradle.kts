@@ -38,11 +38,13 @@ android {
     buildFeatures {
         compose = true
     }
+    sourceSets {
+        getByName("main").java.srcDirs("src/main/java", "libs")
+    }
 }
 
+
 dependencies {
-
-
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -50,7 +52,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.ui.tooling.preview)    
     implementation(libs.androidx.material3)
     implementation(libs.firebase.auth)
     implementation(libs.androidx.credentials)
@@ -63,4 +65,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0")
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
 }

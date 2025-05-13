@@ -9,9 +9,9 @@ object AuthManager {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    onResult(true, "Login successful!")
+                    onResult(true, "Prijava uspješna!")
                 } else {
-                    onResult(false, task.exception?.message ?: "Login failed.")
+                    onResult(false, task.exception?.message ?: "Prijava nije uspjela.")
                 }
             }
     }
@@ -20,9 +20,9 @@ object AuthManager {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    onResult(true, "Registration successful!")
+                    onResult(true, "Registracija uspješna!")
                 } else {
-                    onResult(false, task.exception?.message ?: "Registration failed.")
+                    onResult(false, task.exception?.message ?: "Registracija nije uspjela.")
                 }
             }
     }

@@ -26,7 +26,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Struna 🎸 Prijava", fontSize = 24.sp)
+        Text("Struna: prijava", fontSize = 24.sp)
 
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
@@ -69,7 +69,7 @@ fun SignUpScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Struna 🎸 Registracija", fontSize = 24.sp)
+        Text("Struna: registracija", fontSize = 24.sp)
 
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
