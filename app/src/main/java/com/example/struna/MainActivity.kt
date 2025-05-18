@@ -10,14 +10,14 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.launch
 
-// OVAKO: Sada nema dodatnih import-a za screens (sve ostaje u istom paketu)
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,32 +42,50 @@ fun StrunaApp() {
             onLoginClick = { email, password ->
                 AuthManager.loginUser(email, password) { success, message ->
                     if (success) {
-                        Toast.makeText(context, "Welcome!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Dobrodošli!", Toast.LENGTH_SHORT).show()
                         currentScreen = "home"
                     } else {
                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                     }
                 }
             },
-            onNavigateToSignUp = {
-                currentScreen = "signup"
-            }
+            onNavigateToSignUp = { currentScreen = "signup" },
+            onGoogleLoginSuccess = {
+                // Novi flow za Google prijavu!
+                checkUserHasUsername(
+                    onHasUsername = { currentScreen = "home" },
+                    onMissingUsername = { currentScreen = "addUsername" }
+                )
+            },
+            onForgotPasswordClick = { currentScreen = "reset" }
         )
 
         "signup" -> SignUpScreen(
-            onSignUpClick = { email, password ->
-                AuthManager.registerUser(email, password) { success, message ->
-                    if (success) {
-                        Toast.makeText(context, "Account created!", Toast.LENGTH_SHORT).show()
+            onSignUpClick = { email, password, username ->
+                AuthManager.register(
+                    email, password, username,
+                    onSuccess = {
+                        Toast.makeText(context, "Račun kreiran!", Toast.LENGTH_SHORT).show()
                         currentScreen = "home"
-                    } else {
+                    },
+                    onError = { message ->
                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                     }
-                }
+                )
             },
-            onNavigateBackToLogin = {
+            onNavigateBackToLogin = { currentScreen = "login" }
+        )
+
+        "reset" -> PasswordResetScreen(
+            onPasswordReset = {
+                Toast.makeText(context, "Provjeri email za upute.", Toast.LENGTH_SHORT).show()
                 currentScreen = "login"
-            }
+            },
+            onBack = { currentScreen = "login" }
+        )
+
+        "addUsername" -> AddUsernameScreen(
+            onUsernameSaved = { currentScreen = "home" }
         )
 
         "home" -> HomeScreen(
@@ -78,6 +96,25 @@ fun StrunaApp() {
         )
     }
 }
+
+
+
+fun checkUserHasUsername(
+    onHasUsername: () -> Unit,
+    onMissingUsername: () -> Unit
+) {
+    val user = Firebase.auth.currentUser ?: return
+    Firebase.firestore.collection("users").document(user.uid).get()
+        .addOnSuccessListener { doc ->
+            val username = doc.getString("username")
+            if (username.isNullOrBlank()) {
+                onMissingUsername()
+            } else {
+                onHasUsername()
+            }
+        }
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,6 +135,7 @@ fun HomeScreen(onLogout: () -> Unit) {
                 DrawerItem("Metronom") { selectedScreen = "metronom"; scope.launch { drawerState.close() } }
                 DrawerItem("Scoreboard") { selectedScreen = "scoreboard"; scope.launch { drawerState.close() } }
                 DrawerItem("Pjesme") { selectedScreen = "pjesme"; scope.launch { drawerState.close() } }
+                DrawerItem("Bodovi") { selectedScreen = "bodovi"; scope.launch { drawerState.close() } }
             }
         }
     ) {
@@ -126,6 +164,13 @@ fun HomeScreen(onLogout: () -> Unit) {
                                 }
                             )
                             DropdownMenuItem(
+                                text = { Text("Bodovi iz jamova") },
+                                onClick = {
+                                    expandedProfileMenu = false
+                                    selectedScreen = "bodovi"
+                                }
+                            )
+                            DropdownMenuItem(
                                 text = { Text("Odjava") },
                                 onClick = {
                                     expandedProfileMenu = false
@@ -150,13 +195,14 @@ fun HomeScreen(onLogout: () -> Unit) {
                     "scoreboard" -> ScoreboardScreen()
                     "pjesme" -> PjesmeScreen()
                     "favorites" -> OmiljenePjesmeScreen()
+                    "bodovi" -> BodoviIzJamovaScreen()
                 }
             }
         }
     }
 }
 
-// ➡️ Ovo je funkcija koja dinamički vraća pravi naslov
+// Ovo je funkcija koja dinamički vraća pravi naslov
 fun getTitleForScreen(screen: String): String {
     return when (screen) {
         "stimer" -> "Štimer"
@@ -166,6 +212,7 @@ fun getTitleForScreen(screen: String): String {
         "scoreboard" -> "Scoreboard"
         "pjesme" -> "Pjesme"
         "favorites" -> "Omiljene pjesme"
+        "bodovi" -> "Bodovi iz jamova"
         else -> "Struna"
     }
 }
@@ -179,3 +226,5 @@ fun DrawerItem(text: String, onClick: () -> Unit) {
         Text(text)
     }
 }
+
+
