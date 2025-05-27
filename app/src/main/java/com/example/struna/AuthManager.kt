@@ -6,7 +6,7 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.firestore
 
 object AuthManager {
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    lateinit var auth: FirebaseAuth
 
     fun loginUser(email: String, password: String, onResult: (Boolean, String) -> Unit) {
         auth.signInWithEmailAndPassword(email, password)

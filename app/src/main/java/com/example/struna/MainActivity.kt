@@ -16,6 +16,7 @@ import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.launch
 
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
@@ -25,6 +26,8 @@ class MainActivity : ComponentActivity() {
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this)
+
+        AuthManager.auth = FirebaseAuth.getInstance()
 
         setContent {
             StrunaApp()

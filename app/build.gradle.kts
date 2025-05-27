@@ -41,6 +41,8 @@ android {
     sourceSets {
         getByName("main").java.srcDirs("src/main/java", "libs")
     }
+
+
 }
 
 
@@ -59,12 +61,19 @@ dependencies {
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
     testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+    testImplementation ("io.mockk:mockk:1.14.2")
+    androidTestImplementation(libs.ui.test.junit4)
+    //implementation("androidx.core:core:1.16.0")
 
     implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
     implementation("com.google.firebase:firebase-firestore")
@@ -75,7 +84,5 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation ("com.google.firebase:firebase-auth-ktx")
     implementation ("com.google.firebase:firebase-firestore-ktx")
-
-
-
+    testImplementation(kotlin("test"))
 }

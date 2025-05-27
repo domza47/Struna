@@ -138,14 +138,14 @@ class JamModeViewModel : ViewModel() {
     }
 
     // Pretvori frekvenciju u naziv note (C, C#, D, ...)
-    private fun freqToNoteName(freq: Float): String {
+    fun freqToNoteName(freq: Float): String {
         if (freq <= 0f) return "—"
         val notes = listOf(
             "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
         )
         val midi = (69 + 12 * log2(freq / 440f)).roundToInt()
-        val note = notes[(midi + 3) % 12] // +3 da E bude E, A bude A, itd.
-        return note
+        val noteIndex = (midi % 12 + 12) % 12  // osigurava pozitivan indeks
+        return notes[noteIndex]
     }
 
     fun saveScoreToFirebase(onResult: (isHighScore: Boolean) -> Unit) {
