@@ -11,26 +11,42 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import com.google.firebase.firestore.FieldPath
+import com.example.struna.Pjesma
 
 @Composable
 fun OmiljenePjesmeScreen() {
     val user = Firebase.auth.currentUser
     var favorites by remember { mutableStateOf<Set<String>>(emptySet()) }
+    var omiljenePjesme by remember { mutableStateOf<List<Pjesma>>(emptyList()) }
     var selectedSongId by remember { mutableStateOf<String?>(null) }
+    var favoritesUpdateTrigger by remember { mutableStateOf(0) } // Okidač za refetch
 
-    // Učitaj favorite ids iz Firestore-a
-    LaunchedEffect(user?.uid) {
+    // 1. Dohvati favorite ID-jeve i pjesme svaki put kad favoritesUpdateTrigger naraste
+    LaunchedEffect(user?.uid, favoritesUpdateTrigger) {
         if (user != null) {
             Firebase.firestore.collection("users").document(user.uid)
                 .collection("favorites")
                 .get()
                 .addOnSuccessListener { res ->
-                    favorites = res.documents.mapNotNull { it.id }.toSet()
+                    favorites = res.documents.map { it.id }.toSet()
+
+                    // 2. Kad dohvatimo favorite, dohvatimo i pjesme
+                    if (favorites.isNotEmpty()) {
+                        Firebase.firestore.collection("songs")
+                            .whereIn("id", favorites.toList())
+                            .get()
+                            .addOnSuccessListener { songRes ->
+                                omiljenePjesme = songRes.documents.mapNotNull { doc ->
+                                    doc.toObject(Pjesma::class.java)
+                                }
+                            }
+                    } else {
+                        omiljenePjesme = emptyList()
+                    }
                 }
         }
     }
-
-    val omiljenePjesme = samplePjesme.filter { favorites.contains(it.id) }
 
     if (selectedSongId == null) {
         Column(
@@ -70,8 +86,12 @@ fun OmiljenePjesmeScreen() {
                                         Firebase.firestore.collection("users").document(user.uid)
                                             .collection("favorites").document(pjesma.id)
                                             .delete()
-                                        // Makni iz lokalne liste
-                                        favorites = favorites - pjesma.id
+                                            .addOnSuccessListener {
+                                                favoritesUpdateTrigger++
+                                            }
+                                            .addOnFailureListener {
+                                                // optionally: Toast/poruka o grešci
+                                            }
                                     }
                                 }
                             ) {
@@ -87,7 +107,7 @@ fun OmiljenePjesmeScreen() {
             }
         }
     } else {
-        val pjesma = samplePjesme.find { it.id == selectedSongId }
+        val pjesma = omiljenePjesme.find { it.id == selectedSongId }
         if (pjesma != null) {
             PrikazPjesmeScreen(
                 pjesma = pjesma,

@@ -11,6 +11,7 @@
                   <entry key="Duration" value="90" />
                   <entry key="Tests" value="360" />
                   <entry key="samsung SM-A037G" value="120" />
+                  <entry key="samsung SM-A528B" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -24,6 +25,7 @@
                   <entry key="Duration" value="90" />
                   <entry key="Tests" value="360" />
                   <entry key="samsung SM-A037G" value="120" />
+                  <entry key="samsung SM-A528B" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -50,6 +52,7 @@
                   <entry key="Duration" value="90" />
                   <entry key="Tests" value="360" />
                   <entry key="samsung SM-A037G" value="120" />
+                  <entry key="samsung SM-A528B" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
