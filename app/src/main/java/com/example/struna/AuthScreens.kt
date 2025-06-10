@@ -34,7 +34,7 @@ fun LoginScreen(
     val context = LocalContext.current
     val auth = Firebase.auth
 
-    // Zamijeni s tvojim pravim WEB CLIENT ID-om!
+
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestIdToken("441618247222-08h4b310d5vpscl58irqap9gnt7arjqj.apps.googleusercontent.com")
         .requestEmail()
