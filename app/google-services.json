@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "441618247222",
+    "project_id": "struna-app",
+    "storage_bucket": "struna-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441618247222:android:bdf411570133835d27f297",
+        "android_client_info": {
+          "package_name": "com.example.struna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "441618247222-08h4b310d5vpscl58irqap9gnt7arjqj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIeTM8-fNTyOxuXAQmlRPCqWKFn34amUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "441618247222-08h4b310d5vpscl58irqap9gnt7arjqj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
